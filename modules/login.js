@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
+import { View, Text, TextInput, StyleSheet, Pressable, KeyboardAvoidingView, ScrollView } from "react-native";
 
 export default function LoginMenu({ handleLogin }) {
     const [text, setText] = useState('');
@@ -8,7 +8,6 @@ export default function LoginMenu({ handleLogin }) {
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
 
     const validateInput = () => {
-
         let isValid = true;
 
         if (text.trim() === "") {
@@ -23,57 +22,58 @@ export default function LoginMenu({ handleLogin }) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
-            setEmailErrorMessage('Enter a valid mail adress');
+            setEmailErrorMessage('Enter a valid mail address');
             isValid = false;
         } else {
             setEmailErrorMessage('');
         }
 
-        return (isValid);
+        return isValid;
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <View style={styles.container}>
-                <Text style={{ marginTop: 70, fontSize: 30 }}>
-                    Let us get to know you
-                </Text>
-                <Text style={{ marginTop: 190, fontSize: 20 }}>
-                    First Name
-                </Text>
-                <TextInput
-                    onChangeText={setText}
-                    value={text}
-                    placeholder="Enter your first name"
-                    style={styles.textInput}
-                />
-                {errorMessage ? <Text style={styles.errorMessageColor}>{errorMessage}</Text> : null}
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="none">
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={styles.container}>
+                    <Text style={{ marginTop: 70, fontSize: 30 }}>
+                        Let us get to know you
+                    </Text>
+                    <Text style={{ marginTop: 190, fontSize: 20 }}>
+                        First Name
+                    </Text>
+                    <TextInput
+                        onChangeText={setText}
+                        value={text}
+                        placeholder="Enter your first name"
+                        style={styles.textInput}
+                    />
+                    {errorMessage ? <Text style={styles.errorMessageColor}>{errorMessage}</Text> : null}
 
-                <Text style={{ marginTop: 70, fontSize: 20 }}>
-                    Email
-                </Text>
-                <TextInput
-                    onChangeText={setEmail}
-                    value={email}
-                    placeholder="Enter your email"
-                    style={styles.textInput}
-                    keyboardType="email-address"
-                />
-                {emailErrorMessage ? <Text style={styles.errorMessageColor}>{emailErrorMessage}</Text> : null}
-
-            </View>
-            <View style={styles.bottom}>
-                <Pressable style={styles.nextButton}
-                    onPress={() => {
-                        if (validateInput()) {
-                            const user = { name: text, email: email };
-                            handleLogin(user); // Store data in AsyncStorage
-                        }
-                    }}>
-                    <Text>Next</Text>
-                </Pressable>
-            </View>
-        </View>
+                    <Text style={{ marginTop: 70, fontSize: 20 }}>
+                        Email
+                    </Text>
+                    <TextInput
+                        onChangeText={setEmail}
+                        value={email}
+                        placeholder="Enter your email"
+                        style={styles.textInput2}
+                        keyboardType="email-address"
+                    />
+                    {emailErrorMessage ? <Text style={styles.errorMessageColor}>{emailErrorMessage}</Text> : null}
+                </View>
+                <View style={styles.bottom}>
+                    <Pressable style={styles.nextButton}
+                        onPress={() => {
+                            if (validateInput()) {
+                                const user = { name: text, email: email };
+                                handleLogin(user); // Store data in AsyncStorage
+                            }
+                        }}>
+                        <Text>Next</Text>
+                    </Pressable>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -92,6 +92,17 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         fontSize: 16,
         marginTop: 10
+    },
+    textInput2: {
+        borderWidth: 1,
+        borderColor: "#000",
+        borderRadius: 5,
+        padding: 10,
+        width: "80%",
+        backgroundColor: "#fff",
+        fontSize: 16,
+        marginTop: 10,
+        marginBottom : 70
     },
     bottom: {
         backgroundColor: '#ededed',
